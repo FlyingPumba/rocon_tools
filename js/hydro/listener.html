@@ -5,29 +5,29 @@
 
 <script type="text/javascript" src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
 <script type="text/javascript" src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
-<script type="text/javascript" src="https://raw.githack.com/robotics-in-concert/rocon_tools/indigo/rocon_interactions/js/interactions.js"></script>
+<!--
+<script type="text/javascript" src="http://chimek.yujinrobot.com/rosjs/interactions.js"></script>
+-->
+<script type="text/javascript" src="http://robotics-in-concert.github.io/rocon_tools/js/hydro/interactions.js"></script>
 <script type="text/javascript" type="text/javascript">
 
-  var params = queryInteractionParameters()
-  var remaps = queryInteractionRemaps()
-  var rosbridge_uri = queryInteractionsRosbridgeURI()
-
-  console.log("Params: " + JSON.stringify(params))
-  console.log("Remaps: " + JSON.stringify(remaps))
-  console.log("Rosbridge URI : " + rosbridge_uri);
-  
+  console.log("Display Name : " + rocon_interactions.display_name)
+  console.log("Rosbridge URI: " + rocon_interactions.rosbridge_uri)
+  console.log("Parameters   : " + JSON.stringify(rocon_interactions.parameters))
+  console.log("Remappings   : " + JSON.stringify(rocon_interactions.remappings))
+ 
   // Connecting to ROS
   // -----------------
   var ros = new ROSLIB.Ros({
-    url : rosbridge_uri
+    url : rocon_interactions.rosbridge_uri
     //url : 'ws://localhost:8080'
   });
 
   // Subscribing to a Topic
   // ----------------------
   var topic_name = '/chatter'
-  if (topic_name in remaps)
-    topic_name = remaps[topic_name]
+  if (topic_name in rocon_interactions.remappings)
+    topic_name = rocon_interactions.remappings[topic_name]
   var listener = new ROSLIB.Topic({
     ros : ros,
     name : topic_name,
