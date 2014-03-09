@@ -1,0 +1,215 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Interaction Specification &mdash; rocon_interactions 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="rocon_interactions 0.1.0 documentation" href="index.html" />
+    <link rel="next" title="Modules" href="modules.html" />
+    <link rel="prev" title="RosApi" href="rosapi.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Modules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rosapi.html" title="RosApi"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">rocon_interactions 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="interaction-specification">
+<h1>Interaction Specification<a class="headerlink" href="#interaction-specification" title="Permalink to this headline">¶</a></h1>
+<p>Interactions are specified in <a class="reference external" href="http://en.wikipedia.org/wiki/YAML">yaml</a> to be loaded onto the interactions manager node,
+via either the parameter server or over the node ros api.</p>
+<div class="section" id="interaction-types">
+<h2>Interaction Types<a class="headerlink" href="#interaction-types" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>Direct executable</li>
+<li>Rosrun executable</li>
+<li>Roslaunch launcher</li>
+<li>Web url</li>
+<li>Web app</li>
+<li>Android activity</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="yaml-specification">
+<h2>Yaml Specification<a class="headerlink" href="#yaml-specification" title="Permalink to this headline">¶</a></h2>
+<p>A single interaction specification in yaml has the following format:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">role</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">compatibility</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">display_name</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">description</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">icon</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">resource_name</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">parameters</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">remappings</span><span class="p-Indicator">:</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">remap_from</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">remap_to</span><span class="p-Indicator">:</span>
+</pre></div>
+</div>
+<p>The names above resolve as follows:</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">name</span></tt> : the name used to determine interaction type and start the interactivity<ul>
+<li>direct executable : either program name (must be on the PATH), or absolute path to the program, e.g. rqt_graph</li>
+<li>rosrunnable : a ros resource name (pkg/filename) pair, e.g. rocon_interactions/loader</li>
+<li>roslaunchable : a ros resource name (pkg/launcher) where the filename is a .launch file, e.g. rocon_interactions/rviz_markers.launch</li>
+<li>web url : a normal web url, e.g. <a class="reference external" href="http://wiki.ros.org/rocon_interactions">http://wiki.ros.org/rocon_interactions</a></li>
+<li>web app : a normal web url pointing to a valid ros web app, e.g. <a class="reference external" href="http://robotics-in-concert.github.io/rocon_interactions/js/listener.html">http://robotics-in-concert.github.io/rocon_interactions/js/listener.html</a></li>
+<li>android activity : the fully qualified name for launching an activity, e.g. com.github.robotics_in_concert.rocon_android.SolutionManager</li>
+</ul>
+</li>
+<li><tt class="docutils literal"><span class="pre">role</span></tt>: the role to embed this interaction in, e.g. admin, dev, customer</li>
+<li><tt class="docutils literal"><span class="pre">compatibility</span></tt>: a <a class="reference external" href="http://wiki.ros.org/rocon_uri">rocon_uri</a> field establishing its platform compatibility</li>
+<li><tt class="docutils literal"><span class="pre">display_name</span></tt>: a human friendly name to show to the user</li>
+<li><tt class="docutils literal"><span class="pre">description</span></tt>: provide some info about the interaction, important as the name can be usually configured in various ways</li>
+<li><tt class="docutils literal"><span class="pre">icon</span></tt>: an icon to represent this interaction (optional)<ul>
+<li><tt class="docutils literal"><span class="pre">resource_name</span></tt>: ros resource name to locate this icon</li>
+</ul>
+</li>
+<li><tt class="docutils literal"><span class="pre">parameters</span></tt>: is a free-form yaml variable that apps must parse (only useful for web app and android types)</li>
+<li><tt class="docutils literal"><span class="pre">remappings</span></tt>: same meaning as remappings in <a class="reference external" href="http://wiki.ros.org/roslaunch/XML/remap">roslaunch xml</a> files, see the examples (only useful for web app and android types).</li>
+</ul>
+</div></blockquote>
+<p>Interactions may be combined together in a yaml list for loading onto the interaction node.</p>
+</div>
+<div class="section" id="symbols">
+<h2>Symbols<a class="headerlink" href="#symbols" title="Permalink to this headline">¶</a></h2>
+<p>The interactions node will substitute various symbols when loading the interactions. These
+include:</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">ROSBRIDGE_ADDRESS</span></tt> : substitutes the interactions node&#8217;s configured rosbridge address parameter</li>
+<li><tt class="docutils literal"><span class="pre">ROSBRIDGE_PORT</span></tt> : substitutes the interactions node&#8217;s configured rosbridge port parameter</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Web app:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://robotics-in-concert.github.io/rocon_tools/js/current/listener.html</span>
+<span class="l-Scalar-Plain">role</span><span class="p-Indicator">:</span> <span class="s">&#39;Web</span><span class="nv"> </span><span class="s">Apps&#39;</span>
+<span class="l-Scalar-Plain">compatibility</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">rocon:/*/*/hydro|indigo</span>
+<span class="l-Scalar-Plain">display_name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Listener</span>
+<span class="l-Scalar-Plain">description</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Simple listener using rosjs in a web app.</span>
+<span class="l-Scalar-Plain">icon</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">resource_name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">rocon_bubble_icons/rocon.png</span>
+<span class="l-Scalar-Plain">parameters</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">rosbridge_address</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">__ROSBRIDGE_ADDRESS__</span>
+  <span class="l-Scalar-Plain">rosbridge_port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">__ROSBRIDGE_PORT__</span>
+<span class="l-Scalar-Plain">remappings</span><span class="p-Indicator">:</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">remap_from</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/chatter</span>
+    <span class="l-Scalar-Plain">remap_to</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/babbler</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Interaction Specification</a><ul>
+<li><a class="reference internal" href="#interaction-types">Interaction Types</a></li>
+<li><a class="reference internal" href="#yaml-specification">Yaml Specification</a></li>
+<li><a class="reference internal" href="#symbols">Symbols</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rosapi.html"
+                        title="previous chapter">RosApi</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="next chapter">Modules</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/specification.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Modules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rosapi.html" title="RosApi"
+             >previous</a> |</li>
+        <li><a href="index.html">rocon_interactions 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Daniel Stonier.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

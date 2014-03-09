@@ -1,0 +1,430 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>rocon_interactions &mdash; rocon_interactions 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="rocon_interactions 0.1.0 documentation" href="index.html" />
+    <link rel="up" title="Modules" href="modules.html" />
+    <link rel="next" title="Changelog for package rocon_interactions" href="CHANGELOG.html" />
+    <link rel="prev" title="Modules" href="modules.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="CHANGELOG.html" title="Changelog for package rocon_interactions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Modules"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">rocon_interactions 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rocon-interactions">
+<h1>rocon_interactions<a class="headerlink" href="#rocon-interactions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-rocon_interactions">
+<span id="rocon-interactions-package"></span><h2><a class="reference internal" href="#module-rocon_interactions" title="rocon_interactions"><tt class="xref py py-mod docutils literal"><span class="pre">rocon_interactions</span></tt></a> Package<a class="headerlink" href="#module-rocon_interactions" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-rocon_interactions.exceptions">
+<span id="exceptions-module"></span><h2><a class="reference external" href="http://docs.python.org/library/exceptions.html#exceptions" title="(in Python v2.7)"><tt class="xref py py-mod docutils literal"><span class="pre">exceptions</span></tt></a> Module<a class="headerlink" href="#module-rocon_interactions.exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="rocon_interactions.exceptions.InvalidInteraction">
+<em class="property">exception </em><tt class="descclassname">rocon_interactions.exceptions.</tt><tt class="descname">InvalidInteraction</tt><a class="headerlink" href="#rocon_interactions.exceptions.InvalidInteraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+<p>Whenever an interaction has been specified incorrectly.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="rocon_interactions.exceptions.MalformedInteractionsYaml">
+<em class="property">exception </em><tt class="descclassname">rocon_interactions.exceptions.</tt><tt class="descname">MalformedInteractionsYaml</tt><a class="headerlink" href="#rocon_interactions.exceptions.MalformedInteractionsYaml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+<p>Whenever malformed yaml is used in loading a set of interactions.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="rocon_interactions.exceptions.YamlResourceNotFoundException">
+<em class="property">exception </em><tt class="descclassname">rocon_interactions.exceptions.</tt><tt class="descname">YamlResourceNotFoundException</tt><a class="headerlink" href="#rocon_interactions.exceptions.YamlResourceNotFoundException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.IOError</span></tt></p>
+<p>The requested yaml resource could not be found.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-rocon_interactions.interactions">
+<span id="interactions-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">interactions</span></tt> Module<a class="headerlink" href="#module-rocon_interactions.interactions" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rocon_interactions.interactions.Interaction">
+<em class="property">class </em><tt class="descclassname">rocon_interactions.interactions.</tt><tt class="descname">Interaction</tt><big>(</big><em>msg</em><big>)</big><a class="headerlink" href="#rocon_interactions.interactions.Interaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Defines an interaction. This wraps the base ros msg data structure with
+a few convenient management handles.</p>
+<dl class="attribute">
+<dt id="rocon_interactions.interactions.Interaction.compatibility">
+<tt class="descname">compatibility</tt><a class="headerlink" href="#rocon_interactions.interactions.Interaction.compatibility" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rocon_interactions.interactions.Interaction.display_name">
+<tt class="descname">display_name</tt><a class="headerlink" href="#rocon_interactions.interactions.Interaction.display_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rocon_interactions.interactions.Interaction.hash">
+<tt class="descname">hash</tt><a class="headerlink" href="#rocon_interactions.interactions.Interaction.hash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rocon_interactions.interactions.Interaction.max">
+<tt class="descname">max</tt><a class="headerlink" href="#rocon_interactions.interactions.Interaction.max" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rocon_interactions.interactions.Interaction.msg">
+<tt class="descname">msg</tt><a class="headerlink" href="#rocon_interactions.interactions.Interaction.msg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rocon_interactions.interactions.Interaction.name">
+<tt class="descname">name</tt><a class="headerlink" href="#rocon_interactions.interactions.Interaction.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rocon_interactions.interactions.Interaction.namespace">
+<tt class="descname">namespace</tt><a class="headerlink" href="#rocon_interactions.interactions.Interaction.namespace" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rocon_interactions.interactions.Interaction.role">
+<tt class="descname">role</tt><a class="headerlink" href="#rocon_interactions.interactions.Interaction.role" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="rocon_interactions.interactions.generate_hash">
+<tt class="descclassname">rocon_interactions.interactions.</tt><tt class="descname">generate_hash</tt><big>(</big><em>name</em>, <em>role</em>, <em>namespace</em><big>)</big><a class="headerlink" href="#rocon_interactions.interactions.generate_hash" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a unique hash for this interaction corresponding to the
+name-role-namespace triple. We use zlib&#8217;s crc32 here instead of unique_id because of it&#8217;s brevity which is important
+when trying to id a remocon app by its hash from an nfc tag.</p>
+<p>Might be worth checking here <a class="reference external" href="http://docs.python.org/2.7/library/zlib.html#zlib.crc32">http://docs.python.org/2.7/library/zlib.html#zlib.crc32</a> if
+his doesn&#8217;t produce the same hash on all platforms.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the executable name of the interaction</li>
+<li><strong>role</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the role the interaction is embedded in</li>
+<li><strong>namespace</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the namespace in which to embed this interaction</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="rocon_interactions.interactions.load_msgs_from_yaml_resource">
+<tt class="descclassname">rocon_interactions.interactions.</tt><tt class="descname">load_msgs_from_yaml_resource</tt><big>(</big><em>resource_name</em><big>)</big><a class="headerlink" href="#rocon_interactions.interactions.load_msgs_from_yaml_resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load interactions from a yaml resource.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>resource_name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; pkg/filename of a yaml formatted interactions file (ext=.interactions).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a list of ros msg interaction specifications</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">concert_msgs.Interaction[]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises :</th><td class="field-body"><tt class="xref py py-exc docutils literal"><span class="pre">rocon_interactions.YamlResourceNotFoundException,</span></tt> if yaml is not found.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><tt class="xref py py-exc docutils literal"><span class="pre">rocon_interactions.MalformedInteractionsYaml,</span></tt> if yaml is malformed.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-rocon_interactions.interactions_table">
+<span id="interactions-table-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">interactions_table</span></tt> Module<a class="headerlink" href="#module-rocon_interactions.interactions_table" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rocon_interactions.interactions_table.InteractionsTable">
+<em class="property">class </em><tt class="descclassname">rocon_interactions.interactions_table.</tt><tt class="descname">InteractionsTable</tt><a class="headerlink" href="#rocon_interactions.interactions_table.InteractionsTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>The runtime populated interactions table along with methods to
+manipulate it.</p>
+<dl class="method">
+<dt id="rocon_interactions.interactions_table.InteractionsTable.filter">
+<tt class="descname">filter</tt><big>(</big><em>roles=None</em>, <em>compatibility_uri='rocon:/'</em><big>)</big><a class="headerlink" href="#rocon_interactions.interactions_table.InteractionsTable.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter the interactions in the table according to role and/or compatibility uri.</p>
+<p>&#64;param roles : a list of roles to filter against, use all roles if None
+&#64;type str[]</p>
+<p>&#64;param compatibility_uri : compatibility rocon uri, eliminates interactions that don&#8217;t match this uri.
+&#64;type str (rocon_uri)</p>
+<p>&#64;return interactions : subset of all interactions that survived the filter
+&#64;rtype interactions.Interactions[]</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rocon_interactions.interactions_table.InteractionsTable.find">
+<tt class="descname">find</tt><big>(</big><em>interaction_hash</em><big>)</big><a class="headerlink" href="#rocon_interactions.interactions_table.InteractionsTable.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the specified interaction.</p>
+<p>&#64;param interaction_hash in crc32 format
+&#64;type str</p>
+<p>&#64;return interaction if found, None otherwise.
+&#64;rtype rocon_interactions.Interaction</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rocon_interactions.interactions_table.InteractionsTable.generate_role_view">
+<tt class="descname">generate_role_view</tt><big>(</big><big>)</big><a class="headerlink" href="#rocon_interactions.interactions_table.InteractionsTable.generate_role_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a temporary copy of the interactions and sorts them into a dictionary
+view classified by role.</p>
+<p>Note: there&#8217;s got to be a faster way of doing this.</p>
+<p>&#64;return A role based view of the interactions
+&#64;rtype dict role(str) : interactions.Interaction[]</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rocon_interactions.interactions_table.InteractionsTable.interactions">
+<tt class="descname">interactions</tt><a class="headerlink" href="#rocon_interactions.interactions_table.InteractionsTable.interactions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rocon_interactions.interactions_table.InteractionsTable.load">
+<tt class="descname">load</tt><big>(</big><em>msgs</em><big>)</big><a class="headerlink" href="#rocon_interactions.interactions_table.InteractionsTable.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load some interactions into the interaction table. This involves some initialisation
+and validation steps.</p>
+<p>&#64;param msgs : a list of interaction specifications to populate the table with.
+&#64;type rocon_interaction_msgs.msg.Interaction[]</p>
+<p>&#64;return list of all additions and any that were flagged as invalid
+&#64;rtype (interactions.Interaction[], rocon_interaction_msgs.msg..Interaction[]) : (new, invalid)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rocon_interactions.interactions_table.InteractionsTable.roles">
+<tt class="descname">roles</tt><big>(</big><big>)</big><a class="headerlink" href="#rocon_interactions.interactions_table.InteractionsTable.roles" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all roles for the currently stored interactions.</p>
+<p>&#64;return a list of all roles
+&#64;rtype str[]</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rocon_interactions.interactions_table.InteractionsTable.unload">
+<tt class="descname">unload</tt><big>(</big><em>msgs</em><big>)</big><a class="headerlink" href="#rocon_interactions.interactions_table.InteractionsTable.unload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removed the specified interactions interactions table. This list is typically
+the same list as the user might initially send - no hashes yet generated.</p>
+<p>&#64;param msgs : a list of interactions
+&#64;type rocon_interaction_msgs.msg..Interaction[]</p>
+<p>&#64;return a list of removed interactions
+&#64;rtype rocon_interaction_msgs.msg..Interaction[]</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rocon_interactions.loader">
+<span id="loader-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">loader</span></tt> Module<a class="headerlink" href="#module-rocon_interactions.loader" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rocon_interactions.loader.InteractionsLoader">
+<em class="property">class </em><tt class="descclassname">rocon_interactions.loader.</tt><tt class="descname">InteractionsLoader</tt><a class="headerlink" href="#rocon_interactions.loader.InteractionsLoader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>This class is responsible for loading the role manager with the roles
+and app specifications provided in the service definitions.</p>
+<dl class="method">
+<dt id="rocon_interactions.loader.InteractionsLoader.load">
+<tt class="descname">load</tt><big>(</big><em>interactions_yaml_resource</em>, <em>namespace='/'</em>, <em>load=True</em><big>)</big><a class="headerlink" href="#rocon_interactions.loader.InteractionsLoader.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a set of configurations specified in a yaml file and send the command to
+load/unload these on the interactions manager. For convenience, it also allows
+the setting of a namespace for the whole group which will only get applied if
+an interaction has no setting in the yaml.</p>
+<p>&#64;param interactions_yaml_resource : yaml resource name for role-app parameterisation
+&#64;type yaml string</p>
+<p>&#64;param namespace: namespace to push connections down into
+&#64;type string (e.g. /interactions)</p>
+<p>&#64;param load : either load or unload the interaction information.
+&#64;type boolean</p>
+<p>&#64;raise YamlResourceNotFoundException, MalformedInteractionsYaml</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rocon_interactions.manager">
+<span id="manager-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">manager</span></tt> Module<a class="headerlink" href="#module-rocon_interactions.manager" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rocon_interactions.manager.InteractionsManager">
+<em class="property">class </em><tt class="descclassname">rocon_interactions.manager.</tt><tt class="descname">InteractionsManager</tt><a class="headerlink" href="#rocon_interactions.manager.InteractionsManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Manages connectivity information provided by services and provides this
+for human interactive (aka remocon) connections.</p>
+<dl class="attribute">
+<dt id="rocon_interactions.manager.InteractionsManager.interactions_table">
+<tt class="descname">interactions_table</tt><a class="headerlink" href="#rocon_interactions.manager.InteractionsManager.interactions_table" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rocon_interactions.manager.InteractionsManager.parameters">
+<tt class="descname">parameters</tt><a class="headerlink" href="#rocon_interactions.manager.InteractionsManager.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rocon_interactions.manager.InteractionsManager.platform_info">
+<tt class="descname">platform_info</tt><a class="headerlink" href="#rocon_interactions.manager.InteractionsManager.platform_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rocon_interactions.manager.InteractionsManager.publishers">
+<tt class="descname">publishers</tt><a class="headerlink" href="#rocon_interactions.manager.InteractionsManager.publishers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rocon_interactions.manager.InteractionsManager.services">
+<tt class="descname">services</tt><a class="headerlink" href="#rocon_interactions.manager.InteractionsManager.services" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rocon_interactions.manager.InteractionsManager.spin">
+<tt class="descname">spin</tt><big>(</big><big>)</big><a class="headerlink" href="#rocon_interactions.manager.InteractionsManager.spin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the set of /remocons/&lt;name&gt;_&lt;uuid&gt; connections.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rocon_interactions.remocon_monitor">
+<span id="remocon-monitor-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">remocon_monitor</span></tt> Module<a class="headerlink" href="#module-rocon_interactions.remocon_monitor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rocon_interactions.remocon_monitor.RemoconMonitor">
+<em class="property">class </em><tt class="descclassname">rocon_interactions.remocon_monitor.</tt><tt class="descname">RemoconMonitor</tt><big>(</big><em>topic_name</em>, <em>publish_interactive_clients_callback</em><big>)</big><a class="headerlink" href="#rocon_interactions.remocon_monitor.RemoconMonitor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Attaches a subscriber to a remocon publisher and monitors the
+status of the remocon.</p>
+<dl class="attribute">
+<dt id="rocon_interactions.remocon_monitor.RemoconMonitor.name">
+<tt class="descname">name</tt><a class="headerlink" href="#rocon_interactions.remocon_monitor.RemoconMonitor.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rocon_interactions.remocon_monitor.RemoconMonitor.status">
+<tt class="descname">status</tt><a class="headerlink" href="#rocon_interactions.remocon_monitor.RemoconMonitor.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rocon_interactions.remocon_monitor.RemoconMonitor.unregister">
+<tt class="descname">unregister</tt><big>(</big><big>)</big><a class="headerlink" href="#rocon_interactions.remocon_monitor.RemoconMonitor.unregister" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">rocon_interactions</a><ul>
+<li><a class="reference internal" href="#module-rocon_interactions"><tt class="docutils literal"><span class="pre">rocon_interactions</span></tt> Package</a></li>
+<li><a class="reference internal" href="#module-rocon_interactions.exceptions"><tt class="docutils literal"><span class="pre">exceptions</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-rocon_interactions.interactions"><tt class="docutils literal"><span class="pre">interactions</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-rocon_interactions.interactions_table"><tt class="docutils literal"><span class="pre">interactions_table</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-rocon_interactions.loader"><tt class="docutils literal"><span class="pre">loader</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-rocon_interactions.manager"><tt class="docutils literal"><span class="pre">manager</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-rocon_interactions.remocon_monitor"><tt class="docutils literal"><span class="pre">remocon_monitor</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="previous chapter">Modules</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="CHANGELOG.html"
+                        title="next chapter">Changelog for package rocon_interactions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/rocon_interactions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="CHANGELOG.html" title="Changelog for package rocon_interactions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Modules"
+             >previous</a> |</li>
+        <li><a href="index.html">rocon_interactions 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" >Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Daniel Stonier.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
