@@ -55,7 +55,29 @@
             
   <div class="section" id="rosapi">
 <h1>RosApi<a class="headerlink" href="#rosapi" title="Permalink to this headline">¶</a></h1>
-<p>TODO: Specifications for the interaction node ros api.</p>
+<p>These are the specifications for the ros api of the interaction node. This is
+of interest for people using the api to (un)load interactions and also for the
+remocon implementation developer.</p>
+<div class="section" id="published-topics">
+<h2>Published Topics<a class="headerlink" href="#published-topics" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">info</span></tt> (<a class="reference external" href="http://wiki.ros.org/rocon_std_msgs">rocon_std_msgs</a>/MasterInfo) : indirectly used via <a class="reference external" href="http://wiki.ros.org/rocon_master_info">rocon_master_info</a> to publish the interaction master&#8217;s details to remocons, latched.</li>
+<li><tt class="docutils literal"><span class="pre">~interactive_clients</span></tt> (<a class="reference external" href="http://wiki.ros.org/rocon_interaction_msgs">rocon_interaction_msgs</a>/InteractiveClients) : introspect the list of connected remocons, latched.</li>
+<li><tt class="docutils literal"><span class="pre">~roles</span></tt> (<a class="reference external" href="http://wiki.ros.org/rocon_interaction_msgs">rocon_interaction_msgs</a>/Roles) : introspect the currently loaded roles.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="services">
+<h2>Services<a class="headerlink" href="#services" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">~get_interaction</span></tt> (<a class="reference external" href="http://wiki.ros.org/rocon_interaction_msgs">rocon_interaction_msgs</a>/GetInteraction) : used by the android headless launcher to get a single interactions details by hash.</li>
+<li><tt class="docutils literal"><span class="pre">~get_interactions</span></tt> (<a class="reference external" href="http://wiki.ros.org/rocon_interaction_msgs">rocon_interaction_msgs</a>/GetInteractions) : used by all remocons to get a filtered set of compatible interactions by role and <a class="reference external" href="http://wiki.ros.org/rocon_uri">rocon_uri</a>.</li>
+<li><tt class="docutils literal"><span class="pre">~set_interactions</span></tt> (<a class="reference external" href="http://wiki.ros.org/rocon_interaction_msgs">rocon_interaction_msgs</a>/SetInteractions) : used to load and unload interactions on the interaction manager node.</li>
+</ul>
+</div></blockquote>
+</div>
 </div>
 
 
@@ -64,6 +86,15 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RosApi</a><ul>
+<li><a class="reference internal" href="#published-topics">Published Topics</a></li>
+<li><a class="reference internal" href="#services">Services</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="overview.html"
                         title="previous chapter">Overview</a></p>
