@@ -1,6 +1,18 @@
 Changelog
 =========
 
+0.1.11 (2014-12-02)
+-------------------
+
+0.1.10 (2014-11-21)
+-------------------
+* [rocon_bubble_icons] gopher.
+* [rocon_bubble_icons] waypoint icon
+* Contributors: Daniel Stonier
+
+0.1.9 (2014-08-25)
+------------------
+
 0.1.7 (2014-05-26)
 ------------------
 * rocon logo added.

@@ -1,6 +1,26 @@
 Changelog
 =========
 
+0.1.11 (2014-12-02)
+-------------------
+
+0.1.10 (2014-11-21)
+-------------------
+* Merge pull request `#62 <https://github.com/robotics-in-concert/rocon_tools/issues/62>`_ from robotics-in-concert/web
+  add web browser as operating system
+* add furo as robot
+* move web to os
+* add web browser as application_framework for webapp launching in web_remocon
+* [rocon_uri] helpful pointer to the rocon uri rules.
+* Update rules.yaml
+* Contributors: Daniel Stonier, Jihoon Lee
+
+0.1.9 (2014-08-25)
+------------------
+* move from symbolic links to includes for changelogs to avoid eclipse bewilderment.
+* debugging error added for catching pid problem, `#53 <https://github.com/robotics-in-concert/rocon_tools/issues/53>`_.
+* Contributors: Daniel Stonier
+
 0.1.7 (2014-05-26)
 ------------------
 * add korus to the list of robots.

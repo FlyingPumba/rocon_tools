@@ -1,6 +1,20 @@
 Changelog
 =========
 
+0.1.11 (2014-12-02)
+-------------------
+
+0.1.10 (2014-11-21)
+-------------------
+* add install rule for topic_relay closes `#61 <https://github.com/robotics-in-concert/rocon_tools/issues/61>`_
+* add topic_relay script which used for concert gazebo service. topic_relay in topic_tools package does not work for multi master system
+* Contributors: Jihoon Lee
+
+0.1.9 (2014-08-25)
+------------------
+* move from symbolic links to includes for changelogs to avoid eclipse bewilderment.
+* Contributors: Daniel Stonier
+
 0.1.7 (2014-05-26)
 ------------------
 * useful comments wrt the preexec parent group setting for our popen.
