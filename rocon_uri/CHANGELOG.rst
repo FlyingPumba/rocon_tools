@@ -1,6 +1,17 @@
 Changelog
 =========
 
+0.1.13 (2015-01-12)
+-------------------
+* Forgotten colon for yaml dic syntax.
+* Adding mint rebecca version so the rules
+* Contributors: Daniel Stonier
+
+0.1.12 (2015-01-08)
+-------------------
+* add mint in operating system closes `#69 <https://github.com/robotics-in-concert/rocon_tools/issues/69>`_
+* Contributors: Jihoon Lee
+
 0.1.11 (2014-12-02)
 -------------------
 
