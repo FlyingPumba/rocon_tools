@@ -75,20 +75,31 @@ class InteractionsManager(object):
             self._pair = interaction_msgs.Pair()
             self._publishers['pairing'].publish(self._pair)
         self._interactions_table = InteractionsTable(filter_pairing_interactions=not self._parameters['pairing'])
+        self._users_table = UsersTable(filter_pairing_interactions=not self._parameters['pairing'])
         self._services = self._setup_services()
 
-        # Load pre-configured interactions
+        # Load pre-configured interactions and users
         for resource_name in self._parameters['interactions']:
             try:
                 msg_interactions = interactions.load_msgs_from_yaml_resource(resource_name)
                 msg_interactions = self._bind_dynamic_symbols(msg_interactions)
                 (new_interactions, invalid_interactions) = self._interactions_table.load(msg_interactions)
+
+                msg_users = interactions.load_users_from_yaml_file(resource_name)
+                (new_users, invalid_users) = self._users_table.load(msg_users)
+
                 for i in new_interactions:
                     rospy.loginfo("Interactions : loading %s [%s-%s-%s]" %
                                   (i.display_name, i.name, i.role, i.namespace))
                 for i in invalid_interactions:
                     rospy.logwarn("Interactions : failed to load %s [%s-%s-%s]" %
                                   (i.display_name, i.name, i.role, i.namespace))
+                for u in new_users:
+                    rospy.loginfo("Users : loading %s [%s-%s-%s]" %
+                                  (u.user, u.role))
+                for u in invalid_users:
+                    rospy.logwarn("Users : failed to load %s [%s-%s-%s]" %
+                                  (u.user, u.role))
             except YamlResourceNotFoundException as e:
                 rospy.logerr("Interactions : failed to load resource %s [%s]" %
                              (resource_name, str(e)))
