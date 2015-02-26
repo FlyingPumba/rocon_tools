@@ -59,6 +59,48 @@ def generate_hash(display_name, role, namespace):
     '''
     return zlib.crc32(display_name + "-" + role + "-" + namespace)
 
+def load_users_from_yaml_file(file_path):
+    """
+      Load users from a yaml file.
+
+      :param str file_path: file path of a yaml formatted interactions file (ext=.interactions).
+
+      :returns: a list of ros msg user specifications
+      :rtype: rocon_interaction_msgs.User_ []
+
+      :raises: :exc:`.YamlResourceNotFoundException` if yaml is not found.
+      :raises: :exc:`.MalformedInteractionsYaml` if yaml is malformed.
+
+      .. include:: weblinks.rst
+    """
+    users = []
+    try:
+        yaml_filename = file_path
+        if not os.path.isfile(yaml_filename):
+            raise YamlResourceNotFoundException(str(e))
+    except rospkg.ResourceNotFound as e:  # resource not found.
+        raise YamlResourceNotFoundException(str(e))
+    with open(yaml_filename) as f:
+	# split interactions and user-role table in file
+        data = f.read().split('ROLES\n')
+        # load the interactions from yaml into a python object
+        user_yaml_objects = yaml.load(data[1])
+        # now drop it into message format
+        for user_yaml_object in user_yaml_objects:
+            # convert the parameters from a freeform yaml variable to a yaml string suitable for
+            # shipping off in ros msgs (where parameters is a string variable)
+            if 'parameters' in user_yaml_object:  # it's an optional key
+                # chomp trailing newlines
+                user_yaml_object['parameters'] = yaml.dump(user_yaml_object['parameters']).rstrip()
+            user = interaction_msgs.User()
+            try:
+                genpy.message.fill_message_args(user, user_yaml_object)
+            except genpy.MessageException as e:
+                raise MalformedInteractionsYaml(
+                    "malformed yaml preventing converting of yaml to user msg type [%s]" % str(e))
+            users.append(user)
+    return users
+
 
 def load_msgs_from_yaml_file(file_path):
     """
@@ -82,8 +124,10 @@ def load_msgs_from_yaml_file(file_path):
     except rospkg.ResourceNotFound as e:  # resource not found.
         raise YamlResourceNotFoundException(str(e))
     with open(yaml_filename) as f:
+	# split interactions and user-role table in file
+        data = f.read().split('ROLES\n')
         # load the interactions from yaml into a python object
-        interaction_yaml_objects = yaml.load(f)
+        interaction_yaml_objects = yaml.load(data[0])
         # now drop it into message format
         for interaction_yaml_object in interaction_yaml_objects:
             # convert the parameters from a freeform yaml variable to a yaml string suitable for
@@ -296,3 +340,4 @@ class Interaction(object):
                 else:
                     s += "               : " + console.yellow + "%s-%s" % (pair.key, pair.value) + console.reset + '\n'  # noqa
         return s
+
