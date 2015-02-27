@@ -80,15 +80,12 @@ class InteractionsManager(object):
         self._users_table = UsersTable()
         self._services = self._setup_services()
 
-        # Load pre-configured interactions and users
+        # Load pre-configured interactions
         for resource_name in self._parameters['interactions']:
             try:
                 msg_interactions = interactions.load_msgs_from_yaml_resource(resource_name)
                 msg_interactions = self._bind_dynamic_symbols(msg_interactions)
                 (new_interactions, invalid_interactions) = self._interactions_table.load(msg_interactions)
-
-                msg_users = interactions.load_users_from_yaml_file(resource_name)
-                (new_users, invalid_users) = self._users_table.load(msg_users)
 
                 for i in new_interactions:
                     rospy.loginfo("Interactions : loading %s [%s-%s-%s]" %
@@ -96,6 +93,19 @@ class InteractionsManager(object):
                 for i in invalid_interactions:
                     rospy.logwarn("Interactions : failed to load %s [%s-%s-%s]" %
                                   (i.display_name, i.name, i.role, i.namespace))
+            except YamlResourceNotFoundException as e:
+                rospy.logerr("Interactions : failed to load resource %s [%s]" %
+                             (resource_name, str(e)))
+            except MalformedInteractionsYaml as e:
+                rospy.logerr("Interactions : pre-configured interactions yaml malformed [%s][%s]" %
+                             (resource_name, str(e)))
+
+        # Load pre-configured users
+        for resource_name in self._parameters['users']:
+            try:
+                msg_users = interactions.load_users_from_yaml_file(resource_name)
+                (new_users, invalid_users) = self._users_table.load(msg_users)
+
                 for u in new_users:
                     rospy.loginfo("Users : loading %s [%s-%s-%s]" %
                                   (u.user, u.role))
@@ -103,10 +113,10 @@ class InteractionsManager(object):
                     rospy.logwarn("Users : failed to load %s [%s-%s-%s]" %
                                   (u.user, u.role))
             except YamlResourceNotFoundException as e:
-                rospy.logerr("Interactions : failed to load resource %s [%s]" %
+                rospy.logerr("Users : failed to load resource %s [%s]" %
                              (resource_name, str(e)))
             except MalformedInteractionsYaml as e:
-                rospy.logerr("Interactions : pre-configured interactions yaml malformed [%s][%s]" %
+                rospy.logerr("Users : pre-configured interactions yaml malformed [%s][%s]" %
                              (resource_name, str(e)))
 
     def spin(self):
@@ -227,6 +237,7 @@ class InteractionsManager(object):
         param['rosbridge_port'] = rospy.get_param('~rosbridge_port', 9090)
         param['webserver_address'] = rospy.get_param('~webserver_address', 'localhost')
         param['interactions'] = rospy.get_param('~interactions', [])
+        param['users'] = rospy.get_param('~users', [])
         param['pairing'] = rospy.get_param('~pairing', False)
         return param
 

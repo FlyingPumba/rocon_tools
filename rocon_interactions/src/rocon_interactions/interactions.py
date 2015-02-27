@@ -81,10 +81,8 @@ def load_users_from_yaml_file(file_path):
     except rospkg.ResourceNotFound as e:  # resource not found.
         raise YamlResourceNotFoundException(str(e))
     with open(yaml_filename) as f:
-	# split interactions and user-role table in file
-        data = f.read().split('ROLES\n')
         # load the interactions from yaml into a python object
-        user_yaml_objects = yaml.load(data[1])
+        user_yaml_objects = yaml.load(f)
         # now drop it into message format
         for user_yaml_object in user_yaml_objects:
             # convert the parameters from a freeform yaml variable to a yaml string suitable for
@@ -124,10 +122,8 @@ def load_msgs_from_yaml_file(file_path):
     except rospkg.ResourceNotFound as e:  # resource not found.
         raise YamlResourceNotFoundException(str(e))
     with open(yaml_filename) as f:
-	# split interactions and user-role table in file
-        data = f.read().split('ROLES\n')
         # load the interactions from yaml into a python object
-        interaction_yaml_objects = yaml.load(data[0])
+        interaction_yaml_objects = yaml.load(f)
         # now drop it into message format
         for interaction_yaml_object in interaction_yaml_objects:
             # convert the parameters from a freeform yaml variable to a yaml string suitable for
