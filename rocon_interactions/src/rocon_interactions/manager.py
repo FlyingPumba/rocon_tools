@@ -33,6 +33,7 @@ import socket
 
 from .remocon_monitor import RemoconMonitor
 from .interactions_table import InteractionsTable
+from .users_table import UsersTable
 from . import interactions
 from .exceptions import MalformedInteractionsYaml, YamlResourceNotFoundException
 from .rapp_handler import RappHandler, FailedToStartRappError, FailedToStopRappError
@@ -50,6 +51,7 @@ class InteractionsManager(object):
     '''
     __slots__ = [
         '_interactions_table',  # Dictionary of string : interaction_msgs.RemoconApp[]
+        '_users_table',
         '_parameters',
         '_rapp_handler',        # Interface for handling interactions-rapps pairing
         '_publishers',
@@ -75,7 +77,7 @@ class InteractionsManager(object):
             self._pair = interaction_msgs.Pair()
             self._publishers['pairing'].publish(self._pair)
         self._interactions_table = InteractionsTable(filter_pairing_interactions=not self._parameters['pairing'])
-        self._users_table = UsersTable(filter_pairing_interactions=not self._parameters['pairing'])
+        self._users_table = UsersTable()
         self._services = self._setup_services()
 
         # Load pre-configured interactions and users
