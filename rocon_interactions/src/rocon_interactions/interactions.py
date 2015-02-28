@@ -337,3 +337,64 @@ class Interaction(object):
                     s += "               : " + console.yellow + "%s-%s" % (pair.key, pair.value) + console.reset + '\n'  # noqa
         return s
 
+class User(object):
+
+    '''
+      This class defines an user. It does so by wrapping the base
+      rocon_interaction_msgs.User_ msg structure with
+      a few convenient variables and methods.
+
+      .. include:: weblinks.rst
+    '''
+    __slots__ = [
+        'msg',           # rocon_interaction_msgs.User
+    ]
+
+    def __init__(self, msg):
+        """
+          Validate the incoming fields supplied by the interaction msg
+          and populate remaining fields with proper defaults (e.g. calculate the
+          unique hash for this interaction). The hash is calculated based on the
+          incoming display_name-role-namespace triple.
+
+          :param msg: underlying data structure with fields minimally filled via :func:`.load_msgs_from_yaml_resource`.
+          :type msg: rocon_interaction_msgs.Interaction_
+
+          :raises: :exc:`.InvalidInteraction` if the interaction variables were improperly defined (e.g. max = -1)
+
+          .. include:: weblinks.rst
+        """
+        self.msg = msg
+
+    ##############################################################################
+    # Conveniences
+    ##############################################################################
+
+    @property
+    def name(self):
+        """Name of the user."""
+        return self.msg.user
+
+    @property
+    def role(self):
+        """User's role."""
+        return self.msg.role
+
+    def _eq__(self, other):
+        if type(other) is type(self):
+            return self.msg.user == other.msg.user and self.msg.role == other.msg.role
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __str__(self):
+        '''
+          Format the interaction into a human-readable string.
+        '''
+        s += console.cyan + "  Name" + console.reset + "         : " + console.yellow + "%s" % self.msg.user + console.reset + '\n'  # noqa
+        s += console.cyan + "  Role" + console.reset + "  : " + console.yellow + "%s" % self.msg.role + console.reset + '\n'  # noqa
+
+        return s
+
