@@ -100,24 +100,25 @@ class InteractionsManager(object):
                 rospy.logerr("Interactions : pre-configured interactions yaml malformed [%s][%s]" %
                              (resource_name, str(e)))
 
-        # Load pre-configured users
-        for resource_name in self._parameters['users']:
-            try:
-                msg_users = interactions.load_users_from_yaml_file(resource_name)
-                (new_users, invalid_users) = self._users_table.load(msg_users)
+        users_yaml_path = '/opt/ros/indigo/share/chatter_concert/services/chatter/chatter.users'
 
-                for u in new_users:
-                    rospy.loginfo("Users : loading %s [%s-%s-%s]" %
-                                  (u.user, u.role))
-                for u in invalid_users:
-                    rospy.logwarn("Users : failed to load %s [%s-%s-%s]" %
-                                  (u.user, u.role))
-            except YamlResourceNotFoundException as e:
-                rospy.logerr("Users : failed to load resource %s [%s]" %
+        # Load pre-configured users
+        try:
+            msg_users = interactions.load_users_from_yaml_file(users_yaml_path)
+            (new_users, invalid_users) = self._users_table.load(msg_users)
+
+            for u in new_users:
+                rospy.loginfo("Users : loading %s [%s]" %
+                              (u.name, u.role))
+            for u in invalid_users:
+                rospy.logwarn("Users : failed to load %s [%s]" %
+                                  (u.name, u.role))
+        except YamlResourceNotFoundException as e:
+            rospy.logerr("Users : failed to load resource %s [%s]" %
                              (resource_name, str(e)))
-            except MalformedInteractionsYaml as e:
-                rospy.logerr("Users : pre-configured interactions yaml malformed [%s][%s]" %
-                             (resource_name, str(e)))
+        except MalformedInteractionsYaml as e:
+            rospy.logerr("Users : pre-configured interactions yaml malformed [%s][%s]" %
+                         (resource_name, str(e)))
 
     def spin(self):
         '''
