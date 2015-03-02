@@ -288,31 +288,44 @@ class InteractionsManager(object):
         '''
         response = interaction_srvs.GetInteractionsResponse()
         response.interactions = []
+        user = request.user
 
         if request.roles:  # works for None or empty list
             unavailable_roles = [x for x in request.roles if x not in self._interactions_table.roles()]
             for role in unavailable_roles:
                 rospy.logerr("Interactions : received request for interactions of an unregistered role [%s]" % role)
 
-        try:
-            filtered_interactions = self._interactions_table.filter(request.roles, request.uri)
-        except rocon_uri.RoconURIValueError as e:
-            rospy.logerr("Interactions : received request for interactions to be filtered by an invalid rocon uri"
-                         " [%s][%s]" % (request.uri, str(e)))
+        if user == '':
+            rospy.logerr("Interactions: received request for roles with empty user")
             filtered_interactions = []
+        else:
+            try:
+                user_roles = self._users_table.roles(user)
+                requested_roles = [r for r in request.roles if r in user_roles]
+                filtered_interactions = self._interactions_table.filter(requested_roles, request.uri)
+            except rocon_uri.RoconURIValueError as e:
+                rospy.logerr("Interactions : received request for interactions to be filtered by an invalid rocon uri"
+                             " [%s][%s]" % (request.uri, str(e)))
+                filtered_interactions = []
         for i in filtered_interactions:
             response.interactions.append(i.msg)
         return response
 
     def _ros_service_get_roles(self, request):
         uri = request.uri if request.uri != '' else 'rocon:/'
-        try:
-            filtered_interactions = self._interactions_table.filter([], uri)
-        except rocon_uri.RoconURIValueError as e:
-            rospy.logerr("Interactions : received request for roles to be filtered by an invalid rocon uri"
-                         " [%s][%s]" % (rocon_uri, str(e)))
+        user = request.user
+        if user == '':
+            rospy.logerr("Interactions: received request for roles with empty user")
             filtered_interactions = []
-        role_list = list(set([i.role for i in filtered_interactions]))
+        else:
+            try:
+                filtered_interactions = self._interactions_table.filter([], uri)
+            except rocon_uri.RoconURIValueError as e:
+                rospy.logerr("Interactions : received request for roles to be filtered by an invalid rocon uri"
+                     " [%s][%s]" % (rocon_uri, str(e)))
+                filtered_interactions = []
+        user_roles = self._users_table.roles(user)
+        role_list = list(set([i.role for i in filtered_interactions if i.role in user_roles]))
         role_list.sort()
         response = interaction_srvs.GetRolesResponse()
         response.roles = role_list
