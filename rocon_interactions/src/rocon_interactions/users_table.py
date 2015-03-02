@@ -41,7 +41,7 @@ class UsersTable(object):
       .. include:: weblinks.rst
     '''
     __slots__ = [
-        'users',  # rocon_interactions.interactions.Interaction[]
+        '_users',  # rocon_interactions.interactions.User[]
     ]
 
     def __init__(self):
@@ -49,10 +49,9 @@ class UsersTable(object):
         Constructs an empty users table.
 
         """
-        self.users = []
-        """List of :class:`.Interaction` objects that will form the elements of the table."""
+        self._users = []
 
-    def roles(self):
+    def users(self):
         '''
           List all roles for the currently stored users.
 
@@ -60,10 +59,23 @@ class UsersTable(object):
           :rtype: str[]
         '''
         # uniquify the list
-        return list(set([i.role for i in self.users]))
+        return list(set([i.name for i in self._users]))
+
+    def roles(self, user=None):
+        '''
+          List all roles for the currently stored users.
+
+          :returns: a list of all roles
+          :rtype: str[]
+        '''
+        # uniquify the list
+        if user:
+             return list(set([i.role for i in self._users if i.name == user]))
+        else:
+            return list(set([i.role for i in self._users]))
 
     def __len__(self):
-        return len(self.users)
+        return len(self._users)
 
     def __str__(self):
         """
@@ -87,7 +99,7 @@ class UsersTable(object):
           :rtype: dict { role(str) : :class:`.interactions.Interaction`[] }
         '''
         # there's got to be a faster way of doing this.
-        users = list(self.users)
+        users = list(self._users)
         role_view = {}
         for user in users:
             if user.role not in role_view.keys():
@@ -109,9 +121,9 @@ class UsersTable(object):
           :raises: rocon_uri.RoconURIValueError if provided compatibility_uri is invalid.
         '''
         if roles:   # works for classifying non-empty list vs either of None or empty list
-            role_filtered_users = [i for i in self.users if i.role in roles]
+            role_filtered_users = [i for i in self._users if i.role in roles]
         else:
-            role_filtered_users = list(self.users)
+            role_filtered_users = list(self._users)
         filtered_users = [i for i in role_filtered_users
                                  if rocon_uri.is_compatible(i.compatibility, compatibility_uri)]
         return filtered_users
@@ -131,8 +143,8 @@ class UsersTable(object):
         for msg in msgs:
             try:
                 user = interactions.User(msg)
-                self.users.append(user)
-                self.users = list(set(self.users))  # uniquify the list, just in case
+                self._users.append(user)
+                self._users = list(set(self._users))  # uniquify the list, just in case
                 new.append(user)
             except InvalidInteraction:
                 invalid.append(msg)
@@ -155,18 +167,5 @@ class UsersTable(object):
             found = self.find(msg_hash)
             if found is not None:
                 removed.append(msg)
-                self.users.remove(found)
+                self._users.remove(found)
         return removed
-
-    def find(self, user_hash):
-        '''
-          Find the specified user.
-
-          :param str user_hash: in crc32 format
-
-          :returns: user if found, None otherwise.
-          :rtype: :class:`.Interaction`
-        '''
-        user = next((user for user in self.users
-                            if user.hash == user_hash), None)
-        return user
