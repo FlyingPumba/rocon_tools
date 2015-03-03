@@ -81,7 +81,7 @@ def load_users_from_yaml_file(file_path):
     except rospkg.ResourceNotFound as e:  # resource not found.
         raise YamlResourceNotFoundException(str(e))
     with open(yaml_filename) as f:
-        # load the interactions from yaml into a python object
+        # load the users from yaml into a python object
         user_yaml_objects = yaml.load(f)
         # now drop it into message format
         for user_yaml_object in user_yaml_objects:
@@ -98,7 +98,6 @@ def load_users_from_yaml_file(file_path):
                     "malformed yaml preventing converting of yaml to user msg type [%s]" % str(e))
             users.append(user)
     return users
-
 
 def load_msgs_from_yaml_file(file_path):
     """
@@ -352,17 +351,8 @@ class User(object):
 
     def __init__(self, msg):
         """
-          Validate the incoming fields supplied by the interaction msg
-          and populate remaining fields with proper defaults (e.g. calculate the
-          unique hash for this interaction). The hash is calculated based on the
-          incoming display_name-role-namespace triple.
-
           :param msg: underlying data structure with fields minimally filled via :func:`.load_msgs_from_yaml_resource`.
-          :type msg: rocon_interaction_msgs.Interaction_
-
-          :raises: :exc:`.InvalidInteraction` if the interaction variables were improperly defined (e.g. max = -1)
-
-          .. include:: weblinks.rst
+          :type msg: rocon_interaction_msgs.User_
         """
         self.msg = msg
 
@@ -391,7 +381,7 @@ class User(object):
 
     def __str__(self):
         '''
-          Format the interaction into a human-readable string.
+          Format the user-role relation into a human-readable string.
         '''
         s += console.cyan + "  Name" + console.reset + "         : " + console.yellow + "%s" % self.msg.user + console.reset + '\n'  # noqa
         s += console.cyan + "  Role" + console.reset + "  : " + console.yellow + "%s" % self.msg.role + console.reset + '\n'  # noqa

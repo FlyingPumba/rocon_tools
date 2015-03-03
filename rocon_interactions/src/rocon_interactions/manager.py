@@ -86,7 +86,6 @@ class InteractionsManager(object):
                 msg_interactions = interactions.load_msgs_from_yaml_resource(resource_name)
                 msg_interactions = self._bind_dynamic_symbols(msg_interactions)
                 (new_interactions, invalid_interactions) = self._interactions_table.load(msg_interactions)
-
                 for i in new_interactions:
                     rospy.loginfo("Interactions : loading %s [%s-%s-%s]" %
                                   (i.display_name, i.name, i.role, i.namespace))
@@ -100,6 +99,7 @@ class InteractionsManager(object):
                 rospy.logerr("Interactions : pre-configured interactions yaml malformed [%s][%s]" %
                              (resource_name, str(e)))
 
+        # TODO: load the *.users file dinamically
         users_yaml_path = '/opt/ros/indigo/share/chatter_concert/services/chatter/chatter.users'
 
         # Load pre-configured users
@@ -117,7 +117,7 @@ class InteractionsManager(object):
             rospy.logerr("Users : failed to load resource %s [%s]" %
                              (resource_name, str(e)))
         except MalformedInteractionsYaml as e:
-            rospy.logerr("Users : pre-configured interactions yaml malformed [%s][%s]" %
+            rospy.logerr("Users : pre-configured users yaml malformed [%s][%s]" %
                          (resource_name, str(e)))
 
     def spin(self):
@@ -281,7 +281,7 @@ class InteractionsManager(object):
     def _ros_service_get_interactions(self, request):
         '''
           Handle incoming requests to provide a role-applist dictionary
-          filtered for the requesting platform.
+          filtered for the requesting platform and the user.
 
           @param request
           @type concert_srvs.GetInteractionsRequest
@@ -301,8 +301,8 @@ class InteractionsManager(object):
         else:
             try:
                 user_roles = self._users_table.roles(user)
-                requested_roles = [r for r in request.roles if r in user_roles]
-                filtered_interactions = self._interactions_table.filter(requested_roles, request.uri)
+                filtered_roles = [r for r in request.roles if r in user_roles]
+                filtered_interactions = self._interactions_table.filter(filtered_roles, request.uri)
             except rocon_uri.RoconURIValueError as e:
                 rospy.logerr("Interactions : received request for interactions to be filtered by an invalid rocon uri"
                              " [%s][%s]" % (request.uri, str(e)))
