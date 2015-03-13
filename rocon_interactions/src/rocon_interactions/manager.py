@@ -429,11 +429,11 @@ class InteractionsManager(object):
 
     def _get_users_roles(self, user):
         try:
-            auth_srv = rospy.ServiceProxy('get_users_roles', authorization_srvs.GetUsersRoles)
+            auth_srv = rospy.ServiceProxy('/rocon_authorization/get_users_roles', authorization_srvs.GetUsersRoles)
             resp = auth_srv(user)
-            return resp.authenticated
-        except:
-            rospy.logwarn("Could not get roles for user: %s.", user)
+            return resp.roles
+        except Exception as ex:
+            rospy.logwarn("Could not get roles for user: %s. Exception was: %s" % (user, ex))
         return []
 
 
