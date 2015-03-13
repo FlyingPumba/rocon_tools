@@ -59,6 +59,7 @@ def generate_hash(display_name, role, namespace):
     '''
     return zlib.crc32(display_name + "-" + role + "-" + namespace)
 
+
 def load_msgs_from_yaml_file(file_path):
     """
       Load interactions from a yaml resource.
@@ -295,56 +296,3 @@ class Interaction(object):
                 else:
                     s += "               : " + console.yellow + "%s-%s" % (pair.key, pair.value) + console.reset + '\n'  # noqa
         return s
-
-class User(object):
-
-    '''
-      This class defines an user. It does so by wrapping the base
-      rocon_interaction_msgs.User_ msg structure with
-      a few convenient variables and methods.
-
-      .. include:: weblinks.rst
-    '''
-    __slots__ = [
-        'msg',           # rocon_interaction_msgs.User
-    ]
-
-    def __init__(self, msg):
-        """
-          :param msg: underlying data structure with fields minimally filled via :func:`.load_msgs_from_yaml_resource`.
-          :type msg: rocon_interaction_msgs.User_
-        """
-        self.msg = msg
-
-    ##############################################################################
-    # Conveniences
-    ##############################################################################
-
-    @property
-    def name(self):
-        """Name of the user."""
-        return self.msg.user
-
-    @property
-    def role(self):
-        """User's role."""
-        return self.msg.role
-
-    def _eq__(self, other):
-        if type(other) is type(self):
-            return self.msg.user == other.msg.user and self.msg.role == other.msg.role
-        else:
-            return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    def __str__(self):
-        '''
-          Format the user-role relation into a human-readable string.
-        '''
-        s += console.cyan + "  Name" + console.reset + "         : " + console.yellow + "%s" % self.msg.user + console.reset + '\n'  # noqa
-        s += console.cyan + "  Role" + console.reset + "  : " + console.yellow + "%s" % self.msg.role + console.reset + '\n'  # noqa
-
-        return s
-
