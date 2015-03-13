@@ -28,12 +28,12 @@ import rosgraph
 import unique_id
 import rocon_interaction_msgs.msg as interaction_msgs
 import rocon_interaction_msgs.srv as interaction_srvs
+import rocon_authorization.srv as authorization_srvs
 import rocon_uri
 import socket
 
 from .remocon_monitor import RemoconMonitor
 from .interactions_table import InteractionsTable
-from .users_table import UsersTable
 from . import interactions
 from .exceptions import MalformedInteractionsYaml, YamlResourceNotFoundException
 from .rapp_handler import RappHandler, FailedToStartRappError, FailedToStopRappError
@@ -51,13 +51,13 @@ class InteractionsManager(object):
     '''
     __slots__ = [
         '_interactions_table',  # Dictionary of string : interaction_msgs.RemoconApp[]
-        '_users_table',
         '_parameters',
         '_rapp_handler',        # Interface for handling interactions-rapps pairing
         '_publishers',
         '_services',
         'spin',
         '_pair',                # interaction_msgs/Pair showing rapp and remocon that are pairing
+        '_authorization',       # rocon_interactions will try to use the rocon_authorization package to check if users are authorized
         '_watch_loop_period',
         '_remocon_monitors'    # list of currently connected remocons.
     ]
@@ -76,8 +76,8 @@ class InteractionsManager(object):
             self._rapp_handler = RappHandler(self._rapp_manager_status_update_callback)
             self._pair = interaction_msgs.Pair()
             self._publishers['pairing'].publish(self._pair)
+        self._authorization = self._parameters['authorization']
         self._interactions_table = InteractionsTable(filter_pairing_interactions=not self._parameters['pairing'])
-        self._users_table = UsersTable()
         self._services = self._setup_services()
 
         # Load pre-configured interactions
@@ -98,27 +98,6 @@ class InteractionsManager(object):
             except MalformedInteractionsYaml as e:
                 rospy.logerr("Interactions : pre-configured interactions yaml malformed [%s][%s]" %
                              (resource_name, str(e)))
-
-        # TODO: load the *.users file dinamically
-        users_yaml_path = '/opt/ros/indigo/share/chatter_concert/services/chatter/chatter.users'
-
-        # Load pre-configured users
-        try:
-            msg_users = interactions.load_users_from_yaml_file(users_yaml_path)
-            (new_users, invalid_users) = self._users_table.load(msg_users)
-
-            for u in new_users:
-                rospy.loginfo("Users : loading %s [%s]" %
-                              (u.name, u.role))
-            for u in invalid_users:
-                rospy.logwarn("Users : failed to load %s [%s]" %
-                                  (u.name, u.role))
-        except YamlResourceNotFoundException as e:
-            rospy.logerr("Users : failed to load resource %s [%s]" %
-                             (resource_name, str(e)))
-        except MalformedInteractionsYaml as e:
-            rospy.logerr("Users : pre-configured users yaml malformed [%s][%s]" %
-                         (resource_name, str(e)))
 
     def spin(self):
         '''
@@ -238,7 +217,7 @@ class InteractionsManager(object):
         param['rosbridge_port'] = rospy.get_param('~rosbridge_port', 9090)
         param['webserver_address'] = rospy.get_param('~webserver_address', 'localhost')
         param['interactions'] = rospy.get_param('~interactions', [])
-        param['users'] = rospy.get_param('~users', [])
+        param['authorization'] = rospy.get_param('~authorization', False)
         param['pairing'] = rospy.get_param('~pairing', False)
         return param
 
@@ -295,18 +274,28 @@ class InteractionsManager(object):
             for role in unavailable_roles:
                 rospy.logerr("Interactions : received request for interactions of an unregistered role [%s]" % role)
 
-        if user == '':
-            rospy.logerr("Interactions: received request for roles with empty user")
-            filtered_interactions = []
-        else:
-            try:
-                user_roles = self._users_table.roles(user)
+        if self._authorization:
+            user_roles = self._get_users_roles(user)
+            if user == '':
+                rospy.logerr("Interactions: received request for interactions with empty user")
+                # return empty interactions for empty user
+                return response
+            elif user_roles == []:
+                rospy.logerr("Interactions: received request for interactions with unauthorized user")
+                # return empty interactions for unauthorized user
+                return response
+            else:
                 filtered_roles = [r for r in request.roles if r in user_roles]
-                filtered_interactions = self._interactions_table.filter(filtered_roles, request.uri)
-            except rocon_uri.RoconURIValueError as e:
-                rospy.logerr("Interactions : received request for interactions to be filtered by an invalid rocon uri"
-                             " [%s][%s]" % (request.uri, str(e)))
-                filtered_interactions = []
+        else:
+            filtered_roles = request.roles
+
+        try:
+            filtered_interactions = self._interactions_table.filter(filtered_roles, request.uri)
+        except rocon_uri.RoconURIValueError as e:
+            rospy.logerr("Interactions : received request for interactions to be filtered by an invalid rocon uri"
+                         " [%s][%s]" % (request.uri, str(e)))
+            filtered_interactions = []
+
         for i in filtered_interactions:
             response.interactions.append(i.msg)
         return response
@@ -314,20 +303,22 @@ class InteractionsManager(object):
     def _ros_service_get_roles(self, request):
         uri = request.uri if request.uri != '' else 'rocon:/'
         user = request.user
-        if user == '':
-            rospy.logerr("Interactions: received request for roles with empty user")
-            filtered_interactions = []
-        else:
-            try:
-                filtered_interactions = self._interactions_table.filter([], uri)
-            except rocon_uri.RoconURIValueError as e:
-                rospy.logerr("Interactions : received request for roles to be filtered by an invalid rocon uri"
-                     " [%s][%s]" % (rocon_uri, str(e)))
-                filtered_interactions = []
-        user_roles = self._users_table.roles(user)
-        role_list = list(set([i.role for i in filtered_interactions if i.role in user_roles]))
-        role_list.sort()
         response = interaction_srvs.GetRolesResponse()
+
+        try:
+            filtered_interactions = self._interactions_table.filter([], uri)
+        except rocon_uri.RoconURIValueError as e:
+            rospy.logerr("Interactions : received request for roles to be filtered by an invalid rocon uri"
+                 " [%s][%s]" % (rocon_uri, str(e)))
+            filtered_interactions = []
+
+        if self._authorization:
+            user_roles = self._get_users_roles(user)
+            role_list = list(set([i.role for i in filtered_interactions if i.role in user_roles]))
+        else:
+            role_list = list(set([i.role for i in filtered_interactionsi]))
+
+        role_list.sort()
         response.roles = role_list
         return response
 
@@ -435,6 +426,18 @@ class InteractionsManager(object):
         """
         # just check if either string is non-empty
         return self._pair.rapp or self._pair.remocon
+
+    def _get_users_roles(self, user):
+        try:
+            auth_srv = rospy.ServiceProxy('get_users_roles', authorization_srvs.GetUsersRoles)
+            resp = auth_srv(user)
+            return resp.authenticated
+        except:
+            rospy.logwarn("Could not get roles for user: %s.", user)
+            # proper error will be handled in the protocol class
+            self.protocol.incoming(message)
+        return []
+
 
 ##############################################################################
 # Utility methods/factories
