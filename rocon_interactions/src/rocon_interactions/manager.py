@@ -434,8 +434,6 @@ class InteractionsManager(object):
             return resp.authenticated
         except:
             rospy.logwarn("Could not get roles for user: %s.", user)
-            # proper error will be handled in the protocol class
-            self.protocol.incoming(message)
         return []
 
 
