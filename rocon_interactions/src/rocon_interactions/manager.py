@@ -316,7 +316,7 @@ class InteractionsManager(object):
             user_roles = self._get_users_roles(user)
             role_list = list(set([i.role for i in filtered_interactions if i.role in user_roles]))
         else:
-            role_list = list(set([i.role for i in filtered_interactionsi]))
+            role_list = list(set([i.role for i in filtered_interactions]))
 
         role_list.sort()
         response.roles = role_list
